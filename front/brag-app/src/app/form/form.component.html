@@ -1,0 +1,33 @@
+<form (ngSubmit)="onSubmit()" #form="ngForm">
+    <label for="name">achievement:</label>
+    <input id="name" name="name" [(ngModel)]="formData.achievement" required matTooltip="Enter the name here">
+
+    <label for="impact">Impact:</label>
+    <input id="impact" name="impact" [(ngModel)]="formData.impact" required matTooltip="Describe the impact">
+
+    <label for="date">Date:</label>
+    <input id="date" name="date" type="date" [(ngModel)]="formData.date" required matTooltip="Select the date">
+
+    <label for="description">Description:</label>
+    <editor id="description" name="description" [(ngModel)]="formData.description" [init]="{
+        height: 300,
+        menubar: false,
+        plugins: 'link image code',
+        toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code'
+      }">
+    </editor>
+
+    <button type="submit">{{ isEditMode ? 'Update' : 'Submit' }}</button>
+</form>
+
+<div *ngIf="items.length > 0">
+    <h2>Items List</h2>
+    <ul>
+        <li *ngFor="let item of items; let i = index">
+            <span>{{ item.achievement }} - {{ item.impact }} - {{ item.date }} - {{ item.description }}</span>
+            <button (click)="editItem(i)">Edit</button>
+            <button (click)="deleteItem(i)">Delete</button>
+        </li>
+    </ul>
+    <button (click)="downloadPdf()">Download as PDF</button>
+</div>
