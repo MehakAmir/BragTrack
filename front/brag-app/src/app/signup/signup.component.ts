@@ -25,6 +25,7 @@ export class SignupComponent {
         .subscribe({
           next: (response) => {
             this.message = response.message;
+            window.location.href = '/login';
           },
           error: (error) => {
             this.message = 'Signup failed. ' + (error.error?.message || '');

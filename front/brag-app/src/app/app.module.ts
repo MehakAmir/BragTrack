@@ -27,6 +27,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { FormComponent } from './form/form.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatListModule } from '@angular/material/list';
+import { QuillModule } from 'ngx-quill';
+import { HomeComponent } from './home/home.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 
 
 const routes: Routes = [
@@ -41,6 +46,7 @@ const routes: Routes = [
     ForgotPasswordComponent,
     ResetPasswordDialogComponent,
     FormComponent,
+    HomeComponent,
 
   ],
   imports: [
@@ -60,8 +66,12 @@ const routes: Routes = [
     MatDatepickerModule,
     MatFormFieldModule,
     MatIconModule,
+    MatSnackBarModule,
     MatCardModule,
     MatTooltipModule,
+    MatListModule,
+    QuillModule.forRoot()
+
   ],
   providers: [
     DocumentService,
@@ -73,6 +83,11 @@ const routes: Routes = [
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+
+
+
+
 
 
 

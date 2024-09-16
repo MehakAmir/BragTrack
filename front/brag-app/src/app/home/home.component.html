@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BragTrack Landing Page</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Styles */
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+        }
+
+        .landing-page {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: linear-gradient(to right, #f8c6d1, #aa6868);
+            /* Light pink to light black gradient */
+            font-family: 'Montserrat', sans-serif;
+            color: #fff;
+            text-align: center;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: rgba(0, 0, 0, 0.6);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            font-family: 'Dancing Script', cursive;
+            color: #fff;
+            margin: 0;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-buttons a {
+            margin: 0 10px;
+            /* Adjust spacing between buttons */
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 25px;
+            /* Rounded button corners */
+            font-size: 1rem;
+            /* Slightly larger font size */
+            font-weight: 600;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+        }
+
+        img {
+            border-radius: 20%;
+            height: 50%;
+            width: 65%;
+            margin-left: 2%;
+        }
+
+        .signup {
+            background: #ff6b6b;
+        }
+
+        .login {
+            background: #1dd1a1;
+        }
+
+        .forgot-password {
+            background: #48dbfb;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+            transform: scale(1.05);
+            /* Slight scale effect on hover */
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            padding: 20px;
+            margin-top: 80px;
+            /* Adjust margin to account for fixed header */
+        }
+
+        .text-content {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.7);
+            /* Slightly darker background */
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .text-content h3 {
+            font-size: 2rem;
+            font-family: 'Dancing Script', cursive;
+            margin: 0;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6);
+        }
+
+        .text-content p {
+            font-size: 1.25rem;
+            margin: 20px 0;
+            line-height: 1.6;
+            color: #eaeaea;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="landing-page">
+        <header class="header">
+            <div class="logo">
+                <h1>BragTrack</h1>
+            </div>
+            <nav class="nav-buttons">
+                <a class="btn signup" href="#">Sign Up</a>
+                <a class="btn login" href="#">Log In</a>
+                <a class="btn forgot-password" href="#">Forgot Password</a>
+            </nav>
+        </header>
+        <main class="main-content">
+            <div class="text-content">
+                <h3>Welcome to BragTrack</h3>
+                <p>Record, track, and present your professional achievements with pride.</p>
+                <img src="assets/pic1.jpg" alt="Description of Image"><br><br>
+                <a class="btn signup" href="#" routerLink="/form">Create and view Achievements</a>
+            </div>
+        </main>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

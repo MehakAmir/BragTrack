@@ -1,35 +1,171 @@
-<div class="signup-container">
-    <h2>Sign Up</h2>
-    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
-      <div>
-        <label for="name">Name:</label>
-        <input id="name" formControlName="name" type="text" />
-        <div *ngIf="signupForm.get('name')?.invalid && signupForm.get('name')?.touched">Name is required</div>
-      </div>
-  
-      <div>
-        <label for="contactNumber">Contact Number:</label>
-        <input id="contactNumber" formControlName="contactNumber" type="text" />
-        <div *ngIf="signupForm.get('contactNumber')?.invalid && signupForm.get('contactNumber')?.touched">
-          Contact number should be 10-12 digits.
+<header class="header">
+  <div class="logo">
+    <h1>BragTrack</h1>
+  </div>
+  <nav class="nav-buttons">
+    <a class="btn login" href="#" routerLink="/login">Log In</a>
+    <a class="btn forgot-password" href="#" routerLink="/forgot-password">Forgot Password</a>
+  </nav>
+</header>
+
+<body class="landing-page">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header text-center">
+            <h2 style="font-size: 600%" class="top">Sign Up</h2>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+              <div class="form-group">
+                <label for="name">Name:</label>
+                <input id="name" formControlName="name" type="text" class="form-control" />
+                <div *ngIf="signupForm.get('name')?.invalid && signupForm.get('name')?.touched" class="text-danger">
+                  Name is required
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="contactNumber">Contact Number:</label>
+                <input id="contactNumber" formControlName="contactNumber" type="text" class="form-control" />
+                <div *ngIf="signupForm.get('contactNumber')?.invalid && signupForm.get('contactNumber')?.touched"
+                  class="text-danger">
+                  Contact number should be 10-12 digits.
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="email">Email:</label>
+                <input id="email" formControlName="email" type="email" class="form-control" />
+                <div *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched" class="text-danger">
+                  Invalid email format
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="password">Password:</label>
+                <input id="password" formControlName="password" type="password" class="form-control" />
+                <div *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched"
+                  class="text-danger">
+                  Password is required
+                </div>
+              </div>
+
+              <button style="background-color:#aa6868" type="submit" class="btn btn-primary btn-block"
+                [disabled]="signupForm.invalid">Sign Up</button>
+            </form>
+
+            <p *ngIf="message" class="text-center mt-3">{{ message }}</p>
+          </div>
         </div>
       </div>
-  
-      <div>
-        <label for="email">Email:</label>
-        <input id="email" formControlName="email" type="email" />
-        <div *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched">Invalid email format</div>
-      </div>
-  
-      <div>
-        <label for="password">Password:</label>
-        <input id="password" formControlName="password" type="password" />
-        <div *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched">Password is required</div>
-      </div>
-  
-      <button type="submit" [disabled]="signupForm.invalid">Sign Up</button>
-    </form>
-  
-    <p *ngIf="message">{{ message }}</p>
+    </div>
   </div>
-  
+</body>
+<style>
+  .landing-page {
+    background: linear-gradient(to right, #f8c6d1, #aa6868);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    /* Light pink to light black gradient */
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .logo h1 {
+    font-size: 2.5rem;
+    font-family: 'Dancing Script', cursive;
+    color: #fff;
+    margin: 0;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .nav-buttons a {
+    margin: 0 10px;
+    /* Adjust spacing between buttons */
+  }
+
+  .btn {
+    padding: 10px 20px;
+    border-radius: 25px;
+    /* Rounded button corners */
+    font-size: 1rem;
+    /* Slightly larger font size */
+    font-weight: 600;
+    text-decoration: none;
+    color: #fff;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+  }
+
+  .login {
+    background: #1dd1a1;
+  }
+
+  .forgot-password {
+    background: #48dbfb;
+  }
+
+  .btn:hover {
+    opacity: 0.8;
+    transform: scale(1.05);
+    /* Slight scale effect on hover */
+  }
+
+  .card {
+    margin-top: 20%;
+    border-radius: 10px;
+  }
+
+  .card-header {
+    background-color: #aa6868;
+    color: white;
+    border-radius: 20px;
+    border-bottom: 1px solid #d88c8c;
+    font-size: 50%;
+  }
+
+  .form-control {
+    border-radius: 20px;
+    border-color: #d88c8c;
+    box-shadow: none;
+  }
+
+  .top {
+    font-family: 'Dancing Script', cursive;
+  }
+
+  .btn-primary {
+    background-color: #b88181;
+    border: none;
+    border-radius: 9px;
+  }
+
+  .btn-primary:hover {
+    background-color: #aa6868;
+  }
+
+  .text-danger {
+    font-size: 0.875em;
+  }
+
+  .mt-3 {
+    margin-top: 1rem;
+  }
+</style>

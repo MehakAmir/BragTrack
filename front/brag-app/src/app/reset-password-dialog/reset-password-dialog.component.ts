@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reset-password-dialog',
@@ -13,7 +14,7 @@ export class ResetPasswordDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<ResetPasswordDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private authService: AuthService
+    private authService: AuthService, private router: Router
   ) { }
 
   resetPassword() {
@@ -26,6 +27,7 @@ export class ResetPasswordDialogComponent {
       next: (response) => {
         alert('Password reset successfully.');
         this.dialogRef.close();
+        this.router.navigate(['/login']); // Redirect to home
       },
       error: (error) => {
         alert('Failed to reset password: ' + error.error.message);

@@ -1,19 +1,155 @@
-<form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-    <div>
-        <label>Email:</label>
-        <input formControlName="email" type="email">
-        <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
-            Invalid Email
+<header class="header">
+    <div class="logo">
+        <h1>BragTrack</h1>
+    </div>
+    <nav class="nav-buttons">
+        <a class="btn signup" href="#" routerLink="/signup">Sign Up</a>
+        <a class="btn forgot-password" href="#" routerLink="/forgot-password">Forgot Password</a>
+    </nav>
+</header>
+
+<body class="landing-page">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h2 style="font-size:600%;" class="top">Login</h2>
+                    </div>
+                    <div class="card-body">
+                        <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+                            <div class="form-group">
+                                <label for="loginEmail">Email:</label>
+                                <input id="loginEmail" formControlName="email" type="email" class="form-control" />
+                                <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+                                    class="text-danger">
+                                    Invalid Email
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="loginPassword">Password:</label>
+                                <input id="loginPassword" formControlName="password" type="password"
+                                    class="form-control" />
+                                <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+                                    class="text-danger">
+                                    Password is required
+                                </div>
+                            </div>
+
+                            <button type="submit" style="background-color:#de8a8a" class="btn btn-primary btn-block"
+                                [disabled]="loginForm.invalid">Login</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+</body>
 
-    <div>
-        <label>Password:</label>
-        <input formControlName="password" type="password">
-        <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-            Password is required
-        </div>
-    </div>
+<style>
+    .landing-page {
+        background: linear-gradient(to right, #f8c6d1, #aa6868);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        /* Light pink to light black gradient */
+        font-family: 'Montserrat', sans-serif;
+    }
 
-    <button type="submit" [disabled]="loginForm.invalid">Login</button>
-</form>
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 40px;
+        background: rgba(0, 0, 0, 0.6);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .logo h1 {
+        font-size: 2.5rem;
+        font-family: 'Dancing Script', cursive;
+        color: #fff;
+        margin: 0;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .nav-buttons a {
+        margin: 0 10px;
+        /* Adjust spacing between buttons */
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border-radius: 25px;
+        /* Rounded button corners */
+        font-size: 1rem;
+        /* Slightly larger font size */
+        font-weight: 600;
+        text-decoration: none;
+        color: #fff;
+        transition: all 0.3s ease-in-out;
+        cursor: pointer;
+    }
+
+    .signup {
+        background: #ff6b6b;
+    }
+
+    .forgot-password {
+        background: #48dbfb;
+    }
+
+    .btn:hover {
+        opacity: 0.8;
+        transform: scale(1.05);
+        /* Slight scale effect on hover */
+    }
+
+    .card {
+        margin-top: 30%;
+        border-radius: 10px;
+    }
+
+    .card-header {
+        background-color: #aa6868;
+        color: white;
+        border-radius: 20px;
+        border-bottom: 1px solid #d88c8c;
+        font-size: 50%;
+    }
+
+    .form-control {
+        border-radius: 20px;
+        border-color: #d88c8c;
+        box-shadow: none;
+    }
+
+    .top {
+        font-family: 'Dancing Script', cursive;
+    }
+
+    .btn-primary {
+        background-color: #b88181;
+        border: none;
+        border-radius: 9px;
+    }
+
+    .btn-primary:hover {
+        background-color: #aa6868;
+    }
+
+    .text-danger {
+        font-size: 0.875em;
+    }
+
+    .mt-3 {
+        margin-top: 1rem;
+    }
+</style>

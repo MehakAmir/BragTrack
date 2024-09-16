@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import jsPDF from 'jspdf';
 import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar'; // Import MatSnackBar
 
 interface FormData {
   achievement: string;
@@ -17,11 +19,18 @@ interface FormData {
 export class FormComponent {
   formData: FormData = { achievement: '', impact: '', date: '', description: '' };
   items: any[] = [];
+  filteredItems: any[] = [];
+  searchQuery: string = '';
+  filterDate: string = '';
   apiUrl = 'http://localhost:3000/api/achievements'; // Backend API URL
   isEditMode = false; // To differentiate between add and edit
   currentEditId: number | null = null; // Store the id of the current item being edited
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private sanitizer: DomSanitizer,
+    private snackBar: MatSnackBar // Inject MatSnackBar
+  ) {
     this.loadItems(); // Load existing achievements from the backend
   }
 
@@ -29,31 +38,44 @@ export class FormComponent {
   loadItems() {
     this.http.get(this.apiUrl).subscribe((data: any) => {
       this.items = data; // Populate the items list
+      this.applyFilters(); // Apply filters after loading items
     });
   }
 
+  // Configuration for Quill editor
+  editorModules = {
+    toolbar: [
+      [{ 'header': '1' }, { 'header': '2' }],
+      ['bold', 'italic', 'underline'],
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+      ['link', 'image'],
+      ['clean']
+    ]
+  };
+
   // Handle form submission for both adding and editing an achievement
   onSubmit() {
-    // Format the date to YYYY-MM-DD before sending it to the backend
+
     this.formData.date = this.formData.date.split('T')[0];
     if (this.isEditMode) {
-      // If editing, send a PUT request to update the existing achievement
       this.http.put(`${this.apiUrl}/${this.currentEditId}`, this.formData).subscribe(() => {
-        // Update the list locally without reloading all items
         const updatedItemIndex = this.items.findIndex(item => item.id === this.currentEditId);
         if (updatedItemIndex !== -1) {
           this.items[updatedItemIndex] = { ...this.formData, id: this.currentEditId };
         }
         this.resetForm(); // Reset the form
+        this.applyFilters(); // Apply filters after updating
       });
+      this.snackBar.open('Achievement updated successfully!', 'Close', { duration: 3000 });
+      window.location.reload();
     } else {
-      // If adding a new achievement, send a POST request
       this.http.post(this.apiUrl, this.formData).subscribe((newItem: any) => {
         this.items.push(newItem); // Add the new item locally
         this.resetForm(); // Reset the form
+        this.applyFilters(); // Apply filters after adding
       });
-      this.items.push({ ...this.formData });
-      this.formData = { achievement: '', impact: '', date: '', description: '' };
+      this.snackBar.open('Achievement added successfully!', 'Close', { duration: 3000 });
+      window.location.reload();
     }
   }
 
@@ -62,37 +84,54 @@ export class FormComponent {
     const item = this.items[index];
     this.formData = { achievement: item.achievement, impact: item.impact, date: item.date, description: item.description };
     this.isEditMode = true;
-    this.currentEditId = item.id; // Store the id of the item being edited
-    this.formData = { ...this.items[index] };
-
+    this.currentEditId = item.id; // Ensure id is set correctly
   }
 
   // Delete an item from the list and the backend
   deleteItem(index: number) {
     const item = this.items[index];
-    this.http.delete(`${this.apiUrl}/${item.id}`).subscribe(() => {
-      this.items.splice(index, 1); // Remove the item from the local list
-    });
+    if (item.id !== undefined) {
+      this.http.delete(`${this.apiUrl}/${item.id}`).subscribe(() => {
+        this.items.splice(index, 1); // Remove the item from the local list
+        this.applyFilters(); // Apply filters after deleting
+      });
+      this.snackBar.open('Achievement deleted successfully!', 'Close', { duration: 3000 });
+      window.location.reload();
+    } else {
+      console.error('Item id is undefined');
+    }
   }
-
 
   // Download the list of items as a PDF
   downloadPdf() {
     const doc = new jsPDF();
     let y = 10;
 
-    this.items.forEach(item => {
-      doc.text(`achievement: ${item.achievement}`, 10, y);
+    this.filteredItems.forEach(item => {
+      doc.text(`Achievement: ${item.achievement}`, 10, y);
       y += 10;
       doc.text(`Impact: ${item.impact}`, 10, y);
       y += 10;
-      doc.text(`Date: ${item.date}`, 10, y);
+      doc.text(`Date: ${this.formatDate(item.date)}`, 10, y); // Format date here
       y += 10;
-      doc.text(`Description: ${item.description}`, 10, y);
+      const plainDescription = this.stripHtml(item.description);
+      doc.text(`Description: ${plainDescription}`, 10, y);
       y += 20;
     });
 
     doc.save('items.pdf');
+    this.snackBar.open('PDF downloaded successfully!', 'Close', { duration: 3000 });
+  }
+
+  // Helper function to strip HTML tags
+  stripHtml(html: string): string {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || "";
+  }
+
+  // Method to sanitize HTML content
+  sanitize(html: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(html);
   }
 
   // Reset the form to its initial state
@@ -101,6 +140,30 @@ export class FormComponent {
     this.isEditMode = false;
     this.currentEditId = null;
   }
+
+  // Apply search and filter to items
+  applyFilters() {
+    let filtered = this.items;
+
+    if (this.searchQuery) {
+      filtered = filtered.filter(item =>
+        item.achievement.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        item.impact.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    }
+
+    if (this.filterDate) {
+      filtered = filtered.filter(item => item.date === this.filterDate);
+    }
+
+    this.filteredItems = filtered;
+  }
+  formatDate(date: string): string {
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    return new Date(date).toLocaleDateString('en-GB', options); // Change 'en-GB' to your desired locale
+  }
 }
+
+
 
 
