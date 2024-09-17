@@ -133,9 +133,6 @@ app.get('/api/achievements', (req, res) => {
     });
 });
 
-
-
-
 // Start the server
 const PORT = 3000;
 app.listen(PORT, () => {
