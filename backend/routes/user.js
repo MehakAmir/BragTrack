@@ -4,7 +4,57 @@ const router = express.Router();
 
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const cors = require('cors');
+router.use(cors({
+    origin: 'http://localhost:4200',
+    credentials: true,
+    allowedHeaders: ['Authorization', 'Content-Type']
+}));
 
+/**
+ *  @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *
+ * @swagger
+ * tags:
+ *   name: User
+ *   description: User management
+ */
+
+/**
+ * @swagger
+ * /user/signup:
+ *   post:
+ *     summary: Create a new user
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               contactNumber:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Successfully registered
+ *       400:
+ *         description: Email already exists
+ *       500:
+ *         description: Server error
+ */
 router.post('/signup', (req, res) => {
     let user = req.body;
     query = "select email,password,role,status from user where email=?"
@@ -33,9 +83,42 @@ router.post('/signup', (req, res) => {
 
 })
 
+/**
+ * @swagger
+ * /user/login:
+ *   post:
+ *     summary: User login
+ *     tags: [User]
+ * 
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *       401:
+ *         description: Incorrect username or password
+ *       500:
+ *         description: Internal server error
+ */
 router.post('/login', (req, res) => {
     const user = req.body;
-    query = "select email,password,role,status from user where email=?";
+    query = "select id,email,password,role,status from user where email=?";
     connection.query(query, [user.email], (err, results) => {
         if (!err) {
             if (results.length <= 0 || results[0].password != user.password) {
@@ -43,7 +126,7 @@ router.post('/login', (req, res) => {
             }
 
             else if (results[0].password == user.password) {
-                const response = { email: results[0].email, role: results[0].role, password: results[0].password }
+                const response = { email: results[0].email, role: results[0].role, password: results[0].password, id: results[0].id }
                 const accessToken = jwt.sign(response, process.env.ACCESS_TOKEN, { expiresIn: '8h' })
                 res.status(200).json({ token: accessToken });
             }
@@ -58,7 +141,29 @@ router.post('/login', (req, res) => {
 })
 
 
-
+/**
+ * @swagger
+ * /user/forgotPassword:
+ *   post:
+ *     summary: Request password reset
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Email exists for password reset
+ *       400:
+ *         description: Email not found
+ *       500:
+ *         description: Internal server error
+ */
 
 router.post('/forgotPassword', (req, res) => {
     const { email } = req.body;
@@ -75,7 +180,29 @@ router.post('/forgotPassword', (req, res) => {
     });
 });
 
-
+/**
+ * @swagger
+ * /user/resetPassword:
+ *   post:
+ *     summary: Reset user password
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               newPassword:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Password updated successfully
+ *       500:
+ *         description: Internal server error
+ */
 router.post('/resetPassword', (req, res) => {
     const { email, newPassword } = req.body;
     query = "update user set password=? where email=?";

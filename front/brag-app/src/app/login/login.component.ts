@@ -2,11 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
-
-
-
-
-
+import { Token } from '@angular/compiler';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -27,7 +23,9 @@ export class LoginComponent {
       this.authService.login(this.loginForm.value).subscribe(
         (response: any) => {
           localStorage.setItem('token', response.token);
-          this.router.navigate(['/home']); // Redirect to home
+          const token = localStorage.getItem('token');
+          console.log(token);
+          this.router.navigate(['/home']);
         },
         (error) => {
           alert('Login failed. Please check your credentials.');
