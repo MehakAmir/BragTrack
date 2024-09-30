@@ -22,12 +22,10 @@ app.use(cors());
 // Create connection to MySQL
 const db = mysql.createConnection({
     host: 'localhost',
-    user: 'root', // replace with your MySQL username
-    password: 'zoom1234', // replace with your MySQL password
-    database: 'bragapp' // replace with your database name
+    user: 'root', 
+    password: 'zoom1234', 
+    database: 'bragapp' 
 });
-
-// Connect to MySQL
 db.connect(err => {
     if (err) {
         throw err;
@@ -35,7 +33,6 @@ db.connect(err => {
     console.log('MySQL connected');
 });
 
-// Create Achievements table if it doesn't exist
 app.get('/createAchievementsTable', (req, res) => {
     const sql = `
     CREATE TABLE IF NOT EXISTS achievements (
@@ -56,7 +53,7 @@ app.get('/createAchievementsTable', (req, res) => {
 // Insert a new achievement
 app.post('/api/achievements', authenticateToken, (req, res) => {
     const { achievement, impact, tags, description, date } = req.body;
-    const user_id = req.user.id; // Extract user_id from the token
+    const user_id = req.user.id; 
     const sql = 'INSERT INTO achievements (achievement, impact,tags, description, date,user_id) VALUES (?, ?, ?,?,?,?)';
     db.query(sql, [achievement, impact, tags, description, date, user_id], (err, result) => {
         if (err) throw err;
@@ -150,6 +147,21 @@ const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
+
+/**
+ *  @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: Bearer
+ *
+ * @swagger
+ * tags:
+ *   name: Achievements
+ *   description: User management
+ */
 
 /**
  * @swagger

@@ -3,18 +3,19 @@
         <h1>BragTrack</h1>
     </div>
     <nav class="nav-buttons">
-        <a class="btn1 home" href="#" routerLink="/home">Home</a>
-        <a class="btn1 login" href="#" routerLink="/login">logout</a>
+        <input id="search" class="form-control"  [(ngModel)]="searchQuery"
+            (ngModelChange)="applyFilters()" placeholder="Search achievements"
+            matTooltip="Search Achivements">
+        <a class="btn2 home" href="#" routerLink="/home">Home</a>
+        <a class="btn2 login" (click)="logout1()" routerLink="/login">Logout</a>
     </nav>
 </header>
-
-
 <body class="landing-page">
     <div class="container mt-4 d-flex">
         <div class="container mt-4">
             <div class="form-container mx-auto mb-4">
                 <form (ngSubmit)="onSubmit()" #form="ngForm">
-                    <h2 class="text-center mb-4">{{ isEditMode ? 'Edit Achievement' : 'Add Achievement' }}📅🌟</h2>
+                    <h2 style=" font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;" class="text-center mb-4">{{ isEditMode ? 'Edit Achievement' : 'Add Achievement' }}📅🌟</h2>
                     <hr>
                     <br>
                     <br>
@@ -40,7 +41,7 @@
                             <option *ngFor="let tag of tags" [value]="tag">{{ tag }}</option>
                         </select>
                         <br><br>
-                        <button style="margin-left: 35%;" type="submit" class="btn btn-primary btn-lg btn-block">{{
+                        <button  style="margin-left: 35%;" type="submit" class="btn btn-primary btn-lg btn-block">{{
                             isEditMode ? 'Update' : 'Submit'
                             }} achievement</button>
                     </div>
@@ -49,59 +50,83 @@
 
         </div>
         <br><br><br><br><br>
+ <!-- Items List -->
+ <div class="form-containe">
+    <div *ngIf="filteredItems.length > 0" class="mt-4">
+        <h2 style=" font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;" class="text-center mb-4">🏆Achievement List</h2>
+        <hr>
+        <br>
+        
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <div class="form-group">
+                    <label for="search" class="font-weight-bold">Search:</label>
+                    <input id="search" class="form-control" [(ngModel)]="searchQuery"
+                        (ngModelChange)="applyFilters()" placeholder="Search achievements"
+                        matTooltip="Search Achivements">
+                    
+                    <br><br>
+                    <div class="row mb-4">
+                        <div class="col-md-4 mx-auto">
+                            <label for="tagFilter" class="font-weight-bold">Filter:</label>
+                            <br>
+                            <label for="startDate">Start:</label>
+                            <input id="startDate" type="date" class="form-control" [(ngModel)]="startDate"
+                                (change)="filterByDateRange()"> <label for="endDate">End:</label>
+                            <input id="endDate" type="date" class="form-control" [(ngModel)]="endDate"
+                                (change)="filterByDateRange()">
 
-        <!-- Items List -->
-        <div class="form-containe">
-            <div *ngIf="filteredItems.length > 0" class="mt-4">
-                <h2 class="text-center mb-4">🏆🏆🏆Achievement List</h2>
-                <hr>
-                <br>
-                <!-- Search and Filter -->
-                <div class="row mb-4">
-                    <div class="col-md-6 mx-auto">
-                        <div class="form-group">
-                            <label for="search" class="font-weight-bold">Search:</label>
-                            <input id="search" class="form-control" [(ngModel)]="searchQuery"
-                                (ngModelChange)="applyFilters()" placeholder="Search achievements"
-                                matTooltip="Search Achivements">
-                            <!-- Date Range Filter -->
+
+                     
+                            <label for="tagFilter" class="font-weight-bold">Select Tag:</label>
+                            <select id="tagFilter" [(ngModel)]="selectedTag" (change)="onTagChange()"
+                                class="form-control">
+                                <option value="">All Tags</option> 
+                                <option *ngFor="let tag of tags" [value]="tag">{{ tag }}</option>
+                            </select>
                             <br><br>
-                            <div class="row mb-4">
-                                <div class="col-md-4 mx-auto">
-                                    <label for="startDate">Start Date:</label>
-                                    <input id="startDate" type="date" class="form-control" [(ngModel)]="startDate"
-                                        (change)="filterByDateRange()"> <label for="endDate">End Date:</label>
-                                    <input id="endDate" type="date" class="form-control" [(ngModel)]="endDate"
-                                        (change)="filterByDateRange()">
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <ul class="list-group">
-                <li *ngFor="let item of filteredItems; let i = index"
-                    class="list-group-item d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5 class="mb-1">{{ item.achievement }}</h5>
-                        <p class="mb-1"><strong>Impact:</strong> {{ item.impact }}</p>
-                        <p class="mb-1"><strong>Date:</strong> {{ formatDate(item.date) }}</p>
-                        <!-- Format date here -->
-                        <p class="mb-1" [innerHTML]="sanitize(item.description)"></p>
-                        <p class="mb-1"><strong>tags:</strong> {{ item.tags }}</p>
-                    </div>
-                    <div>
-                        <button class="btn btn-warning btn-sm mr-2" (click)="editItem(i)">Edit</button>
-                        <button class="btn btn-danger btn-sm" (click)="deleteItem(i)">Delete</button>
-                    </div>
-                </li>
-            </ul>
-            <button class="btn btn-success mt-3" (click)="downloadPdf()">Download as PDF</button>
         </div>
     </div>
+    <ul class="list-group">
+        <li *ngFor="let item of filteredItems; let i = index" class="list-group-item">
+            <div style="border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; border-radius: 5px;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th style="padding: 10px; border: 1px solid #cb0aed;">Achievement</th>
+                            <th style="padding: 10px; border: 1px solid #cb0aed;">Impact</th>
+                            <th style="padding: 10px; border: 1px solid #cb0aed;">Date</th>
+                            <th style="padding: 10px; border: 1px solid #cb0aed;">Description</th>
+                            <th style="padding: 10px; border: 1px solid #cb0aed;">Tags</th>
+                            <th style="padding: 10px; border: 1px solid #cb0aed;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #cb0aed;">{{ item.achievement }}</td>
+                            <td style="padding: 10px; border: 1px solid #cb0aed;">{{ item.impact }}</td>
+                            <td style="padding: 10px; border: 1px solid #cb0aed;">{{ formatDate(item.date) }}
+                            </td>
+                            <td style="padding: 10px; border: 1px solid #cb0aed;"
+                                [innerHTML]="sanitize(item.description)"></td>
+                            <td style="padding: 10px; border: 1px solid #cb0aed;">{{ item.tags }}</td>
+                            <td style="padding: 10px; border: 1px solid #cb0aed; text-align: right;">
+                                <button style=" font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;" class="btn btn-warning btn-sm mr-2" (click)="editItem(i)">Edit</button>
+                                <button style=" font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;" class="btn btn-danger btn-sm" (click)="deleteItem(i)">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </li>
+    </ul>
+    <button class="btn btn-success mt-3" (click)="downloadPdf()">Export as PDF</button>
 
-    <!-- Scripts -->
+ 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>

@@ -24,13 +24,14 @@ h2 {
     border-radius: 0.5rem;
     border: 1px solid #749ac0;
     padding: 1rem;
-    transition: border-color 0.3s, box-shadow 0.3s;
+    transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
     max-width: 90px;
 }
 
 .form-control:focus {
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    transform: scale(1.02);
 }
 
 .btn {
@@ -42,6 +43,18 @@ h2 {
     text-transform: uppercase;
 }
 
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
 .btn-primary {
     background-color: #007bff;
     border-color: #007bff;
@@ -50,6 +63,7 @@ h2 {
 .btn-primary:hover {
     background-color: #0056b3;
     transform: translateY(-2px);
+    animation: pulse 0.6s ease-in-out;
 }
 
 .btn-primary:active {
@@ -88,13 +102,13 @@ label {
 }
 
 .list-group-item {
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.3s;
 }
 
 .list-group-item:hover {
     background-color: #f1f1f1;
+    transform: scale(1.02);
 }
-
 
 .landing-page {
     background: linear-gradient(-135deg, #dd86d79c, #6a7ee485);
@@ -133,6 +147,9 @@ label {
 .nav-buttons a {
     margin: 0 10px;
 }
+.login {
+    background: #f88181;
+}
 
 .btn1 {
     padding: 10px 20px;
@@ -144,10 +161,18 @@ label {
     transition: all 0.3s ease-in-out;
     cursor: pointer;
 }
-
-.login {
-    background: #866bff;
+.btn2{
+padding: 10px 20px;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+            opacity: 0.9;
 }
+
 
 .home {
     background: #866bff;
@@ -173,18 +198,17 @@ label {
     place-items: center;
     margin-left: 25%;
     margin-top: -50%;
-
 }
 
 .form-containe {
-    max-width: 800px;
+    max-width: 1200px;
     border: 4px solid #7f60d5df;
     border-radius: 0.9rem;
     background-color: #faf8fa;
     padding: 2rem;
     box-shadow: 0 0 15px rgba(147, 112, 196, 0.1);
     place-items: center;
-    margin-left: 30%;
+    margin-left: 15%;
     margin-right: -70%;
 
 }
@@ -207,13 +231,14 @@ h2 {
 .form-control {
     border-radius: 1rem;
     max-width: 200%;
-
+    max-height: 50%;
 }
 
 .form label {
     margin: 20px;
     font-size: 18px;
 }
+
 
 .quill-editor {
     border: 1px solid #6a7ee485;
@@ -238,6 +263,7 @@ h2 {
 .btn-primary:hover {
     background-color: #0056b3;
     border-color: #004085;
+    animation: pulse 0.6s ease-in-out;
 }
 
 .btn-warning {
@@ -246,7 +272,7 @@ h2 {
 }
 
 .btn-warning:hover {
-    background: linear-gradient(-135deg, #dd86d79c, #6a7ee485);
+    background: #dd86d79c;
     border-color: #4f63ae;
 }
 
@@ -266,11 +292,9 @@ h2 {
 }
 
 .btn-success:hover {
-    background: linear-gradient(-135deg, #dd86d79c, #6a7ee485);
+    background: #dd86d79c;
     border-color: #514ea9;
 }
-
-
 
 .list-group-item {
     border: 1px solid #dee2e6;
@@ -278,6 +302,12 @@ h2 {
     background-color: #b9acdf69;
     margin-bottom: 1rem;
     padding: 5%;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.list-group-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .list-group-item h5 {

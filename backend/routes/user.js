@@ -12,21 +12,6 @@ router.use(cors({
 }));
 
 /**
- *  @swagger
- * components:
- *   securitySchemes:
- *     bearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
- *
- * @swagger
- * tags:
- *   name: User
- *   description: User management
- */
-
-/**
  * @swagger
  * /user/signup:
  *   post:
@@ -82,6 +67,7 @@ router.post('/signup', (req, res) => {
 
 
 })
+
 
 /**
  * @swagger
@@ -214,7 +200,5 @@ router.post('/resetPassword', (req, res) => {
         }
     });
 });
-
-
 
 module.exports = router;

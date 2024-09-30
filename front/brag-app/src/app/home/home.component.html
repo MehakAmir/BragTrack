@@ -52,20 +52,14 @@
 
         .btn {
             padding: 10px 20px;
-            border-radius: 25px;
+            border-radius: 15px;
             font-size: 1rem;
             font-weight: 600;
             text-decoration: none;
             color: #fff;
             transition: all 0.3s ease-in-out;
             cursor: pointer;
-        }
-
-        img {
-            border-radius: 20%;
-            height: 50%;
-            width: 65%;
-            margin-left: 2%;
+            opacity: 0.9;
         }
 
         .signup {
@@ -73,7 +67,7 @@
         }
 
         .login {
-            background: #866bff;
+            background: #f88181;
         }
 
         .forgot-password {
@@ -81,8 +75,8 @@
         }
 
         .btn:hover {
-            opacity: 0.8;
-            transform: scale(1.05);
+            opacity: 1;
+            transform: scale(1.1);
         }
 
         .main-content {
@@ -96,16 +90,31 @@
         }
 
         .text-content {
-            max-width: 700px;
+            display: flex;
+            align-items: center;
+            max-width: 1100px;
+            height: 500px;
             margin: 0 auto;
             padding: 30px;
-            background: rgba(18, 16, 16, 0.699);
+            background: rgba(43, 33, 49, 0.699);
             border-radius: 10px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 6px 12px rgba(124, 29, 206, 0.5);
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+
+        .text-content img {
+            height: auto;
+            width: 40%;
+            margin-right: 20px;
+        }
+
+        .text-content div {
+            text-align: left;
         }
 
         .text-content h3 {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-family: 'Dancing Script', cursive;
             margin: 0;
             font-weight: 700;
@@ -115,10 +124,30 @@
         }
 
         .text-content p {
-            font-size: 1.25rem;
+            font-size: 1.50rem;
             margin: 20px 0;
             line-height: 1.6;
             color: #eaeaea;
+        }
+
+        .list-unstyled li {
+            font-size: 16.5px;
+        }
+
+        .mar a {
+            margin: 2%;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -130,18 +159,29 @@
                 <h1>BragTrack</h1>
             </div>
             <nav class="nav-buttons">
-                <a class="btn signup" href="#" routerLink="/signup">Sign Up</a>
-                <a class="btn login" href="#" routerLink="/login">Logout</a>
-                <a class="btn signup" href="#" routerLink="/form">create</a>
-                <a class="btn login" href="#" routerLink="/form">view</a>
+                <a class="btn signup" routerLink="/login">Create</a>
+                <a class="btn signup" routerLink="/login">View</a>
+                
+<a class="btn login" (click)="logout()" routerLink="/login">Logout</a>
             </nav>
         </header>
         <main class="main-content">
             <div class="text-content">
-                <h3>Welcome to BragTrack</h3>
-                <p>Record, track, and present your professional achievements with pride.</p>
-                <img src="assets/pic1.jpg" alt="Description of Image"><br><br>
-                <a class="btn forgot-password" href="#" routerLink="/form">Create and view Achievements</a>
+                <img src="assets/kl.png" alt="Description of Image">
+                <div class="mar">
+                    <h3>Welcome to BragTrack</h3>
+                    <p>Record, track, and present your professional achievements with pride</p>
+                    <ul class="list-unstyled">
+                        <li>Easily document your accomplishments in one structured platform.Monitor your professional
+                            milestones and see how far you’ve come.Present your achievements in a clear and organized
+                            manner for interviews.Effortlessly export your achievements as a PDF for resumes, portfolios
+                        </li>
+                    </ul>
+                    <br>
+                    <a style="margin-left: 10%;" class="btn forgot-password" href="#" routerLink="/form">Create
+                        Achievements</a>
+                    <a class="btn forgot-password" href="#" routerLink="/form">View Achievements</a>
+                </div>
             </div>
         </main>
     </div>

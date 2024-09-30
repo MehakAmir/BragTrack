@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import jsPDF from 'jspdf';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { MatSnackBar } from '@angular/material/snack-bar'; // Import MatSnackBar
+import { MatSnackBar } from '@angular/material/snack-bar'; 
 import { AuthService } from '../services/auth.service';
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, PLATFORM_ID } from '@angular/core';
@@ -29,15 +29,17 @@ export class FormComponent {
   filterDate: string = '';
   startDate: string = '';
   endDate: string = '';
-  apiUrl = 'http://localhost:3000/api/achievements'; // Backend API URL
+  selectedTag: string = '';
+  apiUrl = 'http://localhost:3000/api/achievements'; 
   isEditMode = false;
-  currentEditId: number | null = null; // Store the id of the current item being edited
+  currentEditId: number | null = null; 
   tags = [
     '#Programming', '#Coding', '#SoftwareDevelopment', '#Algorithms', '#DataStructures', '#Python', '#Java', '#JavaScript',
     '#CSharp', '#Ruby', '#WebDevelopment', '#DevOps', '#OpenSource', '#MachineLearning', '#DataScience', '#TechEducation', '#SuccessStories',
     '#TechAchievements', '#CareerGrowth', '#Entrepreneurship', '#Leadership', '#Mentorship', '#ContinuousLearning', '#GoalSetting',
     '#PersonalDevelopment', '#Networking'
   ];
+
   constructor(
     private http: HttpClient,
     private sanitizer: DomSanitizer,
@@ -47,7 +49,9 @@ export class FormComponent {
   ) {
     this.loadItems(); // Load existing achievements from the backend
   }
-
+  logout1() {
+    localStorage.removeItem('token');
+  }
   // Fetch all items from the backend
   loadItems() {
     if (isPlatformBrowser(this.platformId)) {
@@ -68,6 +72,7 @@ export class FormComponent {
       );
     }
   }
+  
 
   // Configuration for Quill editor
   editorModules = {
@@ -79,15 +84,17 @@ export class FormComponent {
       ['clean']
     ]
   };
-
+  logout() {
+    localStorage.removeItem('token');
+  }
   // Handle form submission for both adding and editing an achievement
   onSubmit() {
 
     this.formData.date = this.formData.date.split('T')[0];
-    const token = localStorage.getItem('token'); // Get the token from localStorage
+    const token = localStorage.getItem('token'); 
     console.log('Token:', token);
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}` // Include token in headers
+      'Authorization': `Bearer ${token}` 
     });
     if (this.isEditMode) {
       this.http.put(`${this.apiUrl}/${this.currentEditId}`, this.formData, { headers }).subscribe(() => {
@@ -95,27 +102,28 @@ export class FormComponent {
         if (updatedItemIndex !== -1) {
           this.items[updatedItemIndex] = { ...this.formData, id: this.currentEditId };
         }
-        this.resetForm(); // Reset the form
-        this.applyFilters(); // Apply filters after updating
+        this.resetForm(); 
+        this.applyFilters(); 
       });
       this.snackBar.open('Achievement updated successfully!', 'Close', { duration: 3000 });
       window.location.reload();
     } else {
       this.http.post(this.apiUrl, this.formData, { headers }).subscribe((newItem: any) => {
-        this.items.push(newItem); // Add the new item locally
-        this.resetForm(); // Reset the form
-        this.applyFilters(); // Apply filters after adding
+        this.items.push(newItem); 
+        this.resetForm(); 
+        this.applyFilters(); 
       });
       this.snackBar.open('Achievement added successfully!', 'Close', { duration: 3000 });
+      window.location.reload();
     }
   }
 
-  // Edit an existing item by loading its data into the form
+  // Edit an existing item 
   editItem(index: number) {
     const item = this.items[index];
     this.formData = { achievement: item.achievement, impact: item.impact, tags: item.tags, date: item.date, description: item.description };
     this.isEditMode = true;
-    this.currentEditId = item.id; // Ensure id is set correctly
+    this.currentEditId = item.id; 
   }
 
   // Delete an item from the list and the backend
@@ -123,8 +131,8 @@ export class FormComponent {
     const item = this.items[index];
     if (item.id !== undefined) {
       this.http.delete(`${this.apiUrl}/${item.id}`).subscribe(() => {
-        this.items.splice(index, 1); // Remove the item from the local list
-        this.applyFilters(); // Apply filters after deleting
+        this.items.splice(index, 1); 
+        this.applyFilters(); 
       });
       this.snackBar.open('Achievement deleted successfully!', 'Close', { duration: 3000 });
       window.location.reload();
@@ -143,9 +151,9 @@ export class FormComponent {
     doc.setTextColor(0);
     doc.text('Achievements List', 10, 20);
 
-    let y = 30; // Start position for achievements
+    let y = 30; 
     const pageHeight = doc.internal.pageSize.height;
-    const margin = 18; // Margin from the bottom of the page
+    const margin = 18; 
 
     // Style for achievements
     this.filteredItems.forEach((item, index) => {
@@ -217,9 +225,15 @@ export class FormComponent {
     if (this.filterDate) {
       filtered = filtered.filter(item => item.date === this.filterDate);
     }
+    if (this.selectedTag) {
+      filtered = filtered.filter(item => item.tags.includes(this.selectedTag));
+    }
 
     this.filteredItems = filtered;
 
+  }
+  onTagChange() {
+    this.applyFilters();
   }
 
   // New function for filtering by date range
@@ -237,7 +251,7 @@ export class FormComponent {
   }
   formatDate(date: string): string {
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    return new Date(date).toLocaleDateString('en-GB', options); // Change 'en-GB' to your desired locale
+    return new Date(date).toLocaleDateString('en-GB', options); 
   }
 
 

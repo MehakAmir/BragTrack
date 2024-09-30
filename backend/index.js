@@ -10,7 +10,7 @@ const swaggerUi = require('swagger-ui-express');
 // Swagger definition
 const swaggerOptions = {
     swaggerDefinition: {
-        openapi: '3.0.0', // OpenAPI version
+        openapi: '3.0.0',
         info: {
             title: 'Brag API',
             version: '1.0.0',
@@ -18,32 +18,21 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: 'http://localhost:3000', // Replace with your server URL
+                url: 'http://localhost:3000', 
             },
             
         ],
         
-        components: {
-            securitySchemes: {
-                BearerAuth: {
-                    type: 'http',
-                    scheme: 'bearer',
-                    bearerFormat: 'JWT',
-                },
-            },
-        },
+      
     },
-    apis: ['./routes/user.js','server.js'], // Path to the API docs
+    apis: ['./routes/user.js','server.js'], 
  
 };
 
-// Initialize Swagger docs
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 //http://localhost:3000/api-docs/#/
-
-
 
 
 app.use(cors());
